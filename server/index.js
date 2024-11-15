@@ -120,7 +120,7 @@ app.get("/screenings/:id", (req, res) => {
       return res.json(data);
     });
   });
-  
+
 app.put('/screenings/:id', (req, res) => {
     const screeningId = req.params.id;
     const updateField = Object.keys(req.body)[0];
@@ -140,6 +140,67 @@ app.delete('/screenings/:id', (req, res) => {
       return res.json('Screening has been deleted successfully.');
     });
 });
+
+//booking functionalities
+// Get all bookings with payment_status = success, including seat details
+app.get("/bookings", (req, res) => {
+    const q = `
+      SELECT 
+        b.BookingID,
+        b.UserID,
+        b.ScreeningID,
+        b.BookingTime,
+        b.TotalAmount,
+        u.Username,
+        m.Title as MovieTitle,
+        c.Name as CinemaName,
+        s.ScreeningTime,
+        GROUP_CONCAT(CONCAT(st.Row, st.Number) ORDER BY st.Row, st.Number) as BookedSeats
+      FROM Bookings b
+      JOIN Users u ON b.UserID = u.UserID
+      JOIN Screenings s ON b.ScreeningID = s.ScreeningID
+      JOIN Movies m ON s.MovieID = m.MovieID
+      JOIN Cinemas c ON s.CinemaID = c.CinemaID
+      JOIN BookedSeats bs ON b.BookingID = bs.BookingID
+      JOIN Seats st ON bs.SeatID = st.SeatID
+      WHERE b.payment_status = 'success'
+      GROUP BY b.BookingID
+      ORDER BY b.BookingTime DESC
+    `;
+  
+    db.query(q, (err, data) => {
+      if (err) return res.json(err);
+      return res.json(data);
+    });
+  });
+  
+  // Get single booking details
+  app.get("/bookings/:id", (req, res) => {
+    const bookingId = req.params.id;
+    const q = `
+      SELECT 
+        b.*,
+        u.Username,
+        m.Title as MovieTitle,
+        c.Name as CinemaName,
+        s.ScreeningTime,
+        GROUP_CONCAT(CONCAT(st.Row, st.Number) ORDER BY st.Row, st.Number) as BookedSeats
+      FROM Bookings b
+      JOIN Users u ON b.UserID = u.UserID
+      JOIN Screenings s ON b.ScreeningID = s.ScreeningID
+      JOIN Movies m ON s.MovieID = m.MovieID
+      JOIN Cinemas c ON s.CinemaID = c.CinemaID
+      JOIN BookedSeats bs ON b.BookingID = bs.BookingID
+      JOIN Seats st ON bs.SeatID = st.SeatID
+      WHERE b.BookingID = ? AND b.payment_status = 'success'
+      GROUP BY b.BookingID
+    `;
+  
+    db.query(q, [bookingId], (err, data) => {
+      if (err) return res.json(err);
+      return res.json(data);
+    });
+  });
 
 app.listen(8800, ()=>{
     console.log("Connected to backend!")

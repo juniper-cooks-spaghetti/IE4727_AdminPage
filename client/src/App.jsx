@@ -7,6 +7,7 @@ import Screenings from "./pages/Screenings";
 import AddScreening from "./pages/AddScreening";
 import UpdateScreening from "./pages/UpdateScreening";
 import Navbar from "./components/Navbar";
+import Bookings from "./pages/Bookings";
 
 function App() {
     return (
@@ -21,6 +22,7 @@ function App() {
                         <Route path="/screenings" element={<Screenings />} />
                         <Route path="/screenings/add" element={<AddScreening />} />
                         <Route path="/screenings/update/:id" element={<UpdateScreening />} />
+                        <Route path="/bookings" element={<Bookings />} />
                     </Routes>
                 </main>
             </div>
