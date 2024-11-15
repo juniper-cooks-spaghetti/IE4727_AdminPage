@@ -18,6 +18,8 @@ app.get("/", (req,res)=>{
     res.json("hello this is the backend")
 })
 
+//movies functionalities
+
 app.get("/movies", (req,res)=>{
     const q = "SELECT * FROM movies"
     db.query(q,(err,data)=>{
@@ -74,6 +76,49 @@ app.delete("/movies/:id", (req,res)=>{
     db.query(q, [movieID], (err, data) => {
         if (err) return res.json(err);
         return res.json("Movie has been deleted successfully.");
+    });
+});
+
+//screening functionalities
+app.get('/screenings', (req, res) => {
+    const q = 'SELECT * FROM Screenings';
+    db.query(q, (err, data) => {
+      if (err) return res.json(err);
+      return res.json(data);
+    });
+});
+
+app.post('/screenings', (req, res) => {
+    const q = 'INSERT INTO Screenings (MovieID, CinemaID, ScreeningTime, TicketPrice) VALUES (?)';
+    const values = [
+      req.body.movieId,
+      req.body.cinemaId,
+      req.body.screeningTime,
+      req.body.ticketPrice
+    ];
+    db.query(q, [values], (err, data) => {
+      if (err) return res.json(err);
+      return res.json('Screening has been created successfully.');
+    });
+});
+
+app.put('/screenings/:id', (req, res) => {
+    const screeningId = req.params.id;
+    const updateField = Object.keys(req.body)[0];
+    const updateValue = req.body[updateField];
+    const q = `UPDATE Screenings SET ${updateField} = ? WHERE ScreeningID = ?`;
+    db.query(q, [updateValue, screeningId], (err, data) => {
+      if (err) return res.json(err);
+      return res.json('Screening has been updated successfully.');
+    });
+});
+
+app.delete('/screenings/:id', (req, res) => {
+    const screeningId = req.params.id;
+    const q = 'DELETE FROM Screenings WHERE ScreeningID = ?';
+    db.query(q, [screeningId], (err, data) => {
+      if (err) return res.json(err);
+      return res.json('Screening has been deleted successfully.');
     });
 });
 
