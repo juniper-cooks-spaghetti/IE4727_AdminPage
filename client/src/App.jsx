@@ -3,6 +3,9 @@ import './App.css'
 import Movies from "./pages/movies";
 import AddMovies from "./pages/addmovies";
 import UpdateMovies from "./pages/updatemovies";
+import Screenings from "./pages/Screenings";
+import AddScreening from "./pages/AddScreening";
+import UpdateScreening from "./pages/UpdateScreening";
 import Navbar from "./components/Navbar";
 
 function App() {
@@ -15,6 +18,9 @@ function App() {
                         <Route path="/" element={<Movies />} />
                         <Route path="/add" element={<AddMovies />} />
                         <Route path="/update/:id" element={<UpdateMovies />} />
+                        <Route path="/screenings" element={<Screenings />} />
+                        <Route path="/screenings/add" element={<AddScreening />} />
+                        <Route path="/screenings/update/:id" element={<UpdateScreening />} />
                     </Routes>
                 </main>
             </div>

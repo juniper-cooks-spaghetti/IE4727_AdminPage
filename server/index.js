@@ -101,7 +101,26 @@ app.post('/screenings', (req, res) => {
       return res.json('Screening has been created successfully.');
     });
 });
-
+// Get screening by ID
+app.get("/screenings/:id", (req, res) => {
+    const screeningId = req.params.id;
+    const q = "SELECT * FROM Screenings WHERE ScreeningID = ?";
+    
+    db.query(q, [screeningId], (err, data) => {
+      if (err) return res.json(err);
+      return res.json(data);
+    });
+  });
+  
+  // Get cinemas
+  app.get("/cinemas", (req, res) => {
+    const q = "SELECT * FROM Cinemas";
+    db.query(q, (err, data) => {
+      if (err) return res.json(err);
+      return res.json(data);
+    });
+  });
+  
 app.put('/screenings/:id', (req, res) => {
     const screeningId = req.params.id;
     const updateField = Object.keys(req.body)[0];
