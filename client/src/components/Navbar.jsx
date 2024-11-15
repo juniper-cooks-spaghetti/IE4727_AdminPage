@@ -3,7 +3,6 @@ import { Link, useLocation } from 'react-router-dom';
 const Navbar = () => {
     const location = useLocation();
     
-    // Function to check if the link is active
     const isActive = (path) => {
         return location.pathname === path;
     };
@@ -30,14 +29,24 @@ const Navbar = () => {
                             Movies
                         </Link>
                         <Link
-                            to="/add"
+                            to="/screenings"
                             className={`px-3 py-2 rounded-md text-sm font-medium transition-colors
-                                ${isActive('/add') 
+                                ${isActive('/screenings') 
                                     ? 'bg-gray-700 text-white' 
                                     : 'text-gray-300 hover:bg-gray-700 hover:text-white'
                                 }`}
                         >
-                            Add Movie
+                            Screenings
+                        </Link>
+                        <Link
+                            to="/bookings"
+                            className={`px-3 py-2 rounded-md text-sm font-medium transition-colors
+                                ${isActive('/bookings') 
+                                    ? 'bg-gray-700 text-white' 
+                                    : 'text-gray-300 hover:bg-gray-700 hover:text-white'
+                                }`}
+                        >
+                            Bookings
                         </Link>
                     </div>
                 </div>
