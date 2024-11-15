@@ -44,6 +44,29 @@ app.post("/movies", (req,res)=>{
     })
 })
 
+app.get("/movies/:id", (req, res) => {
+    const movieId = req.params.id;
+    const q = "SELECT * FROM Movies WHERE MovieID = ?";
+    
+    db.query(q, [movieId], (err, data) => {
+        if (err) return res.json(err);
+        return res.json(data);
+    });
+});
+
+app.put("/movies/:id", (req, res) => {
+    const movieId = req.params.id;
+    const updateField = Object.keys(req.body)[0];
+    const updateValue = req.body[updateField];
+    
+    const q = `UPDATE Movies SET ${updateField} = ? WHERE MovieID = ?`;
+    
+    db.query(q, [updateValue, movieId], (err, data) => {
+        if (err) return res.json(err);
+        return res.json("Movie has been updated successfully.");
+    });
+});
+
 app.delete("/movies/:id", (req,res)=>{
     const movieID = req.params.id;
     const q = "DELETE FROM Movies WHERE MovieID = ?";

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { Link } from 'react-router-dom';
 
 const Movies = () => {
     const [movies, setMovies] = useState([]);
@@ -110,11 +111,15 @@ const Movies = () => {
                                 >
                                     View Details
                                 </button>
+                                <Link
+                                    to={`/update/${movie.MovieID}`}
+                                >
                                 <button 
                                     className="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 transition"
                                 >
                                     Edit
                                 </button>
+                                </Link>
                                 <button 
                                     className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 transition"
                                     onClick={()=>handleDelete(movie.MovieID)}
